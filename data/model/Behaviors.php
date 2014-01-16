@@ -96,7 +96,7 @@ trait Behaviors {
 	public function __call($method, $params) {
 		$self = static::_object();
 		foreach ($self->_behaviors as $class => $behavior) {
-			if(method_exists($behavior, $method)) {
+			if ($behavior->respondsTo($method)) {
 				return $behavior->invokeMethod($method, $params);
 			}
 		}
