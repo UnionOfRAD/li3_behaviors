@@ -16,11 +16,13 @@ class Behavior extends \lithium\core\Object {
 	 * @var array
 	 */
 	protected $_config = [];
+
 	/**
 	 * @see lithium\core\Object::_autoConfig
 	 * @var array
 	 */
 	protected $_autoConfig = ['model', 'config'];
+
 	/**
 	 * Hold the fully namespaced class name of the model
 	 *
