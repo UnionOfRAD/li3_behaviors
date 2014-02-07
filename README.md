@@ -84,6 +84,30 @@ class Slug extends \li3_behaviors\data\model\Behavior {
 ?>
 ```
 
+## Dynamically Adding Methods
+
+Sometimes you need to dynamically add methods to a model instance. I.e. when a field 
+name of a behavior is user configurable and needs to be added as a method on the entity.
+
+This can be achived by leveraging existing model functionality. Following an example
+that adds a method using a configured name.
+
+```php
+
+// $model  = '\app\models\Posts'
+// $config = ['field' => 'tags']
+
+$model::instanceMethods([
+	$config['field'] => function($entity) {
+		return $entity->taxonomy;
+	}
+]);
+
+$post = Posts::create(['taxonomy' => 'foo,bar,baz']);
+$post->tags();
+
+```
+
 ## Greetings
 
 The li3 team, Nateabele's filters system and all others which make that possible (including my parents which I love).
