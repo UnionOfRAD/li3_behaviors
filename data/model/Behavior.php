@@ -41,41 +41,44 @@ namespace li3_behaviors\data\model;
 class Behavior extends \lithium\core\Object {
 
 	/**
-	 * Holding the configuration array of the behavior
+	 * Allows to specify default configuration for the behavior. Overwrite
+	 * in sublasses were needed.
+	 *
+	 * @see li3_behaviors\data\model\Behavior::$_config
+	 * @var array
+	 */
+	protected $_defaults = [];
+
+	/**
+	 * Holding the configuration array of the behavior merged
+	 * from the `$_defaults` property and any configuration
+	 * via the model's `$_actsAs` property.
 	 *
 	 * @var array
 	 */
 	protected $_config = [];
 
 	/**
+	 * Automatically makes configuration available.
+	 *
 	 * @see lithium\core\Object::_autoConfig
 	 * @var array
 	 */
 	protected $_autoConfig = ['model', 'config'];
 
 	/**
-	 * Hold the fully namespaced class name of the model
+	 * Hold the fully namespaced class name of the model.
 	 *
 	 * @var string
 	 */
 	protected $_model = null;
 
 	/**
-	 * Bind
+	 * Sets/gets the configuration.
 	 *
-	 * Applies Behaviour to the Model and configures its use
-	 *
-	 * @param \lithium\data\Model $self The Model using this behaviour
-	 */
-	public function __construct($config = []) {
-		parent::__construct($config);
-	}
-
-	/**
-	 * Sets/Gets the configuration for this behavior
-	 *
-	 * @param array $config The new configuration.
-	 * @return array of configurations.
+	 * @param array|string $config The new configuration to apply or a configuration key
+	 *                     to retrieve, returns whole configuration if `null` (default).
+	 * @return mixed Configuration array or configuration option value if $config was string.
 	 */
 	public function config($config = null) {
 		if ($config) {
