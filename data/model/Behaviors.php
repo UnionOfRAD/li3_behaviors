@@ -12,9 +12,42 @@ use lithium\core\Libraries;
 use RuntimeException;
 
 /**
- * Behaviors for the Model class
+ * Trait that adds support for behaviors to the Model class. Add this trait
+ * to your model that you plan to use behaviors with, then define all behaviors
+ * using the `actsAs` property in your model class.
  *
- * Define all behaviors using `protected $_actsAs;` in your model class.
+ * {{{
+ * // ...
+ * class Posts extends \lithium\data\Model {
+ *
+ *    use li3_behaviors\data\model\Behaviors;
+ *
+ *    protected $_actsAs = [
+ *        'Slug' => ['fields' => ['title']]
+ *    ];
+ * // ...
+ * }}}
+ *
+ * This trait also makes some static methods available in the model,
+ * which allows to manage behaviors as follows.
+ *
+ * {{{
+ * // Bind the slug behavior with configuration.
+ * Posts::bindBehavior('Slug', ['fields' => ['title]]);
+ *
+ * // Accessing configuration.
+ * Posts::behavior('Slug')->config();
+ * Posts::behavior('Slug')->config('fields');
+ *
+ * // Unbinding it again.
+ * Posts::unbindBehavior('Slug');
+ * }}}
+ *
+ * Behaviors themselves must extend the Behavior class. See the class'
+ * docblock for more information on how to implement behaviors.
+ *
+ * @see li3_behaviors\data\model\Behaviors::actsAs()
+ * @see li3_behaviors\data\model\Behavior
  */
 trait Behaviors {
 
@@ -64,7 +97,7 @@ trait Behaviors {
 				$name = $config;
 				$config = [];
 			}
-			static::actsAs($name, $config);
+			static::bindBehavior($name, $config);
 		}
 	}
 
@@ -105,45 +138,60 @@ trait Behaviors {
 	}
 
 	/**
-	 * Bind a behavior class to the current model
+	 * Returns a behavior instance. Configuration of
+	 * the instance can be accessed as follows.
 	 *
-	 * @param string $name The name of the behavior
-	 * @param string $config If `$config === true` returns some configurations of the behavior,
-	 *               if `$config === false` unbind the behavior, otherwise `$config` stands for
-	 *               the configuration array to set for the behavior.
-	 * @param string $entry The name of the configuration option to get. If `null` all
-	 *               configuration options will be returned.
-	 *               (this parameter is only applicable if `$config === true`)
-	 * @return boolean `true` on success, `false` otherwise
+	 * {{{
+	 * Posts::behavior('Slug')->config();
+	 * Posts::behavior('Slug')->config('fields');
+	 * }}}
+	 *
+	 * @param string $name The name of the behavior.
+	 * @return array Configuration of the behavior.
 	 */
-	public static function actsAs($name, $config = [], $entry = null) {
+	public static function behavior($name) {
 		$self = static::_object();
-
 		$class = Libraries::locate('behavior', $name);
 
-		if ($config === true) {
-			if (isset($self->_behaviors[$class])) {
-				return $self->_behaviors[$class]->config($entry);
-			}
+		if (!isset($self->_behaviors[$class])) {
 			throw new RuntimeException("Unexisting Behavior named `{$class}`.");
 		}
-		if ($config === false) {
-			unset($self->_behaviors[$class]);
-			return true;
-		}
+		return $self->_behaviors[$class];
+	}
 
-		$model = get_called_class();
+	/**
+	 * Binds a new instance of a behavior to the model using given config or
+	 * reconfigures an existing behavior instance.
+	 *
+	 * @param string $name The name of the behavior.
+	 * @param array $config Configuration for the behavior instance.
+	 */
+	public static function bindBehavior($name, array $config = []) {
+		$self = static::_object();
+		$config = $config + ['model' => get_called_class()];
+
 		if (isset($self->_behaviors[$class])) {
-			$self->_behaviors[$class]->config($config + compact('model'));
-			return true;
+			$self->_behaviors[$class]->config($config);
 		} else {
-			$object = new $class($config + compact('model'));
-			if ($object) {
-				$self->_behaviors[$class] = $object;
-				return true;
-			}
+			$class = Libraries::locate('behavior', $name);
+			$self->_behaviors[$class] = new $class($config);
 		}
-		return false;
+	}
+
+	/**
+	 * Unbinds an instance of a behavior from the model. Will throw
+	 * an exception if behavior is not bind.
+	 *
+	 * @param string $name The name of the behavior.
+	 */
+	public static function unbindBehavior($name) {
+		$self = static::_object();
+		$class = Libraries::locate('behavior', $name);
+
+		if (!isset($self->_behaviors[$class])) {
+			throw new RuntimeException("Unexisting Behavior named `{$class}`.");
+		}
+		unset($self->_behaviors[$class]);
 	}
 }
 
