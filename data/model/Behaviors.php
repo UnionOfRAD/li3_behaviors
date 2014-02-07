@@ -9,6 +9,7 @@
 namespace li3_behaviors\data\model;
 
 use lithium\core\Libraries;
+use lithium\util\Set;
 use RuntimeException;
 
 /**
@@ -52,53 +53,32 @@ use RuntimeException;
 trait Behaviors {
 
 	/**
-	 * Store all loaded behaviors.
+	 * Stores all loaded behavior instances,
+	 * keyed by model name then by behavior name.
 	 *
 	 * @var array
 	 */
-	protected $_behaviors = [];
+	protected static $_behaviors = [];
 
 	/**
-	 * Boolean indicates if the `Model::_init()` has been launched at the initialization step.
-	 */
-	protected $_inited = false;
-
-	/**
-	 * Allow the exectution of a kind of `_init()` for the model instance once.
+	 * Initializes behaviors from the `$_actsAs` property of the model.
 	 *
-	 * @param string $class The fully-namespaced class name to initialize.
+	 * Overwrites `Model::_initialize()` in order to hook initialization of
+	 * behaviors into model initialization phase. Note that `Model::_initialize()`
+	 * is still called and its result returned unmodified.
+	 *
+	 * @param string $class The fully-namespaced model class name to initialize.
+	 * @return object Returns the initialized model instance.
 	 */
 	protected static function _initialize($class) {
 		$self = parent::_initialize($class);
 
-		if (!$self->_inited) {
-			$self->_inited = true;
-			$self->_init();
+		if (isset(static::$_actsAs)) {
+			foreach (Set::normalize(static::$_actsAs) as $name => $config) {
+				static::bindBehavior($name, $config);
+			}
 		}
 		return $self;
-	}
-
-	/**
-	 * Initializer function called just after the model instanciation.
-	 *
-	 * Example to disable the `_init()` call use the following before any access to the model:
-	 * {{{
-	 * Posts::config(['init' => false]);
-	 * }}}
-	 */
-	protected function _init() {
-		$self = static::_object();
-
-		if (!isset($self->_actsAs)) {
-			$self->_actsAs = [];
-		}
-		foreach ($self->_actsAs as $name => $config) {
-			if (is_string($config)) {
-				$name = $config;
-				$config = [];
-			}
-			static::bindBehavior($name, $config);
-		}
 	}
 
 	/**
@@ -110,11 +90,15 @@ trait Behaviors {
 	 * @return mixed
 	 */
 	public static function __callStatic($method, $params) {
-		$self = static::_object();
+		$model = get_called_class();
 
-		foreach ($self->_behaviors as $class => $behavior) {
+		if (!isset(static::$_behaviors[$model])) {
+			return parent::__callStatic($method, $params);
+		}
+		foreach (static::$_behaviors[$model] as $class => $behavior) {
 			if (method_exists($class, $method)) {
-				array_unshift($params, get_called_class());
+				array_unshift($params, $model);
+
 				return call_user_func_array([$class, $method], $params);
 			}
 		}
@@ -129,13 +113,17 @@ trait Behaviors {
 	 * @return mixed
 	 */
 	public function __call($method, $params) {
-		$self = static::_object();
-		foreach ($self->_behaviors as $class => $behavior) {
+		$model = get_called_class();
+
+		if (!isset(static::$_behaviors[$model])) {
+			return parent::__call($method, $params);
+		}
+		foreach (static::$_behaviors[$model] as $class => $behavior) {
 			if ($behavior->respondsTo($method)) {
 				return $behavior->invokeMethod($method, $params);
 			}
 		}
-		parent::__call($method, $params);
+		return parent::__call($method, $params);
 	}
 
 	/**
@@ -148,16 +136,16 @@ trait Behaviors {
 	 * }}}
 	 *
 	 * @param string $name The name of the behavior.
-	 * @return array Configuration of the behavior.
+	 * @return \li3_behaviors\data\model\Behavior Intance of the behavior.
 	 */
 	public static function behavior($name) {
-		$self = static::_object();
 		$class = Libraries::locate('behavior', $name);
+		$model = get_called_class();
 
-		if (!isset($self->_behaviors[$class])) {
-			throw new RuntimeException("Behavior `{$class}` not bound to model.");
+		if (!isset(static::$_behaviors[$model][$class])) {
+			throw new RuntimeException("Behavior `{$class}` not bound to model `{$model}`.");
 		}
-		return $self->_behaviors[$class];
+		return static::$_behaviors[$model][$class];
 	}
 
 	/**
@@ -168,14 +156,15 @@ trait Behaviors {
 	 * @param array $config Configuration for the behavior instance.
 	 */
 	public static function bindBehavior($name, array $config = []) {
-		$self = static::_object();
-		$config = $config + ['model' => get_called_class()];
+		$class = Libraries::locate('behavior', $name);
+		$model = get_called_class();
 
-		if (isset($self->_behaviors[$class])) {
-			$self->_behaviors[$class]->config($config);
+		$config += compact('model');
+
+		if (isset(static::$_behaviors[$model][$class])) {
+			static::$_behaviors[$model][$class]->config($config);
 		} else {
-			$class = Libraries::locate('behavior', $name);
-			$self->_behaviors[$class] = new $class($config);
+			static::$_behaviors[$model][$class] = new $class($config);
 		}
 	}
 
@@ -186,13 +175,13 @@ trait Behaviors {
 	 * @param string $name The name of the behavior.
 	 */
 	public static function unbindBehavior($name) {
-		$self = static::_object();
 		$class = Libraries::locate('behavior', $name);
+		$model = get_called_class();
 
-		if (!isset($self->_behaviors[$class])) {
-			throw new RuntimeException("Behavior `{$class}` not bound to model.");
+		if (!isset(static::$_behaviors[$model][$class])) {
+			throw new RuntimeException("Behavior `{$class}` not bound to model `{$model}`.");
 		}
-		unset($self->_behaviors[$class]);
+		unset(static::$_behaviors[$model][$class]);
 	}
 }
 
