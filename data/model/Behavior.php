@@ -21,7 +21,7 @@ namespace li3_behaviors\data\model;
  *     behaviors `$_config` property.
  *
  *  2. Configuratin merge strategies can be controlled by overwriting
- *     the `_initConfig()` method.
+ *     the `_config()` method.
  *
  *  3. Static calls to the model are transferred to the behavior first
  *     and get the model class name as its first parameter. This allows
@@ -48,7 +48,7 @@ class Behavior extends \lithium\core\Object {
 	 *
 	 * - Overwrite in sublasses where needed. -
 	 *
-	 * @see li3_behaviors\data\model\Behavior::_initConfig()
+	 * @see li3_behaviors\data\model\Behavior::_config()
 	 * @var array
 	 */
 	protected $_defaults = [];
@@ -57,7 +57,7 @@ class Behavior extends \lithium\core\Object {
 	 * Holding the initialized configuration array of the behavior possibly merged from
 	 * the `$_defaults` property and any configuration via the model's `$_actsAs` property.
 	 *
-	 * @see li3_behaviors\data\model\Behavior::_initConfig()
+	 * @see li3_behaviors\data\model\Behavior::_config()
 	 * @var array
 	 */
 	protected $_config = [];
