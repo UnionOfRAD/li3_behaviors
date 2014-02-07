@@ -18,3 +18,5 @@ class MockFlyBehavior extends \li3_behaviors\data\model\Behavior {
 		return $target . ' reached in 1h24.';
 	}
 }
+
+?>

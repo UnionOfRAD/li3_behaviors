@@ -16,21 +16,19 @@ class BehaviorableTest extends \lithium\test\Unit {
 		MockPost::reset();
 	}
 
-	public function testActsAs() {
+	public function testBindUnbindBehavior() {
 		$model = 'li3_behaviors\tests\mocks\data\behavior\MockFlyBehavior';
-		MockPost::actsAs($model, ['param1' => 'value1']);
 
-		$expected = [
-			'param1' => 'value1',
-			'model' => 'li3_behaviors\tests\mocks\data\model\MockPost',
-			'init' => true,
-		];
-		$this->assertEqual($expected, MockPost::actsAs($model, true));
-		$this->assertEqual('value1', MockPost::actsAs($model, true, 'param1'));
+		MockPost::bindBehavior($model, ['param1' => 'value1']);
+		$behavior = MockPost::behavior($model);
 
-		MockPost::actsAs($model, ['param2' => 'value2']);
-		$expected['param2'] = 'value2';
-		$this->assertEqual($expected, MockPost::actsAs($model, true));
+		$result = $behavior;
+		$this->assertTrue($result instanceof $model);
+
+		MockPost::unbindBehavior($model);
+
+		$this->expectException("/Unexisting Behavior/");
+		$behavior = MockPost::behavior($model);
 	}
 
 	public function testCallStatic() {
@@ -52,3 +50,5 @@ class BehaviorableTest extends \lithium\test\Unit {
 		MockPost::actsAs($model, true);
 	}
 }
+
+?>
