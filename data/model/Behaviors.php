@@ -150,7 +150,7 @@ trait Behaviors {
 
 	/**
 	 * Binds a new instance of a behavior to the model using given config or
-	 * reconfigures an existing behavior instance.
+	 * entirely replacing an existing behavior instance with new config.
 	 *
 	 * @param string $name The name of the behavior.
 	 * @param array $config Configuration for the behavior instance.
@@ -159,13 +159,7 @@ trait Behaviors {
 		$class = Libraries::locate('behavior', $name);
 		$model = get_called_class();
 
-		$config += compact('model');
-
-		if (isset(static::$_behaviors[$model][$class])) {
-			static::$_behaviors[$model][$class]->config($config);
-		} else {
-			static::$_behaviors[$model][$class] = new $class($config);
-		}
+		static::$_behaviors[$model][$class] = new $class($config + compact('model'));
 	}
 
 	/**
