@@ -133,3 +133,5 @@ class Behavior extends \lithium\core\Object {
 		return isset($this->_config[$key]) ? $this->_config[$key] : null;
 	}
 }
+
+?>
