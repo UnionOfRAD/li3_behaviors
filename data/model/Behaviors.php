@@ -102,7 +102,8 @@ trait Behaviors {
 	}
 
 	/**
-	 * Transfer static call to the behaviors first.
+	 * Transfer static call to the behaviors first. Static behavior
+	 * methods will get the name of the model as its first parameter.
 	 *
 	 * @param string $method Method name caught by `__callStatic()`.
 	 * @param array $params Arguments given to the above `$method` call.
@@ -121,7 +122,7 @@ trait Behaviors {
 	}
 
 	/**
-	 * Transfer call from the entity class to the behaviors
+	 * Transfer call from the entity class to the behaviors.
 	 *
 	 * @param string $method Method name caught by `__call()`.
 	 * @param array $params Arguments given to the above `$method` call.
@@ -154,7 +155,7 @@ trait Behaviors {
 		$class = Libraries::locate('behavior', $name);
 
 		if (!isset($self->_behaviors[$class])) {
-			throw new RuntimeException("Unexisting Behavior named `{$class}`.");
+			throw new RuntimeException("Behavior `{$class}` not bound to model.");
 		}
 		return $self->_behaviors[$class];
 	}
@@ -189,7 +190,7 @@ trait Behaviors {
 		$class = Libraries::locate('behavior', $name);
 
 		if (!isset($self->_behaviors[$class])) {
-			throw new RuntimeException("Unexisting Behavior named `{$class}`.");
+			throw new RuntimeException("Behavior `{$class}` not bound to model.");
 		}
 		unset($self->_behaviors[$class]);
 	}
