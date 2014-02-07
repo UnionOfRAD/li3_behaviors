@@ -82,7 +82,7 @@ class Behavior extends \lithium\core\Object {
 	protected function _init() {
 		parent::_init();
 		$this->_config($this->_config, $defaults);
-		$this->_filters($this->_model, __CLASS__);
+		$this->_filters($this->_model, __CLASS__, $this->_config);
 	}
 
 	/**

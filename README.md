@@ -70,8 +70,7 @@ class Sluggable extends \li3_behaviors\data\model\Behavior {
 		'label' => 'title'
 	);
 
-	protected function _filters($model, $behavior) {
-		$config = $this->_config;
+	protected function _filters($model, $behavior, $config) {
 		$model::applyFilter('save', function($self, $params, $chain) use ($behavior, $config) {
 			$params['data'][$config['field'] = $behavior::generateSlug(
 				$params['data'][$config['label']]
