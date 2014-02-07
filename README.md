@@ -30,7 +30,7 @@ class Posts extends \lithium\data\Model {
    use li3_behaviors\data\model\Behaviors;
 
    protected $_actsAs = [
-       'Slug' => ['fields' => ['title']]
+       'Sluggable' => ['field' => 'slug', 'label' => 'title']
    ];
 // ...
 ```
@@ -39,12 +39,12 @@ The behaviors trait also makes some static methods available in the model,
 which allows to manage behaviors as follows.
 
 ```php
-// Bind the slug behavior with configuration.
-Posts::bindBehavior('Sluggable', ['field' => 'slug', 'label' => 'title']]);
+// Bind the sluggable behavior with configuration.
+Posts::bindBehavior('Sluggable', ['field' => 'slug', 'label' => 'title']);
 
 // Accessing configuration.
 Posts::behavior('Sluggable')->config();
-Posts::behavior('Sluggable')->config('fields');
+Posts::behavior('Sluggable')->config('field');
 
 // Unbinding it again.
 Posts::unbindBehavior('Sluggable');
@@ -84,6 +84,7 @@ class Sluggable extends \li3_behaviors\data\model\Behavior {
 		return strtolower(Inflector::slug($value));
 	}
 }
+
 ?>
 ```
 
