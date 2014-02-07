@@ -82,7 +82,7 @@ class Behavior extends \lithium\core\Object {
 	protected function _init() {
 		parent::_init();
 		$this->_config($this->_config, $defaults);
-		$this->_filters($this->_model);
+		$this->_filters($this->_model, __CLASS__);
 	}
 
 	/**
@@ -115,9 +115,10 @@ class Behavior extends \lithium\core\Object {
 	 *
 	 *  - Overwrite to apply your own filters. -
 	 *
-	 *  @param $model Class name of the model.
+	 * @param $model Class name of the model.
+	 * @param $model Class name of the behavior.
 	 */
-	protected function _filters($model) {}
+	protected function _filters($model, $behavior) {}
 
 	/**
 	 * Gets the configuration, allows for introspecting behavior configuration.
