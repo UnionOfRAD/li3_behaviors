@@ -16,12 +16,11 @@ use RuntimeException;
  *
  * Define all behaviors using `protected $_actsAs;` in your model class.
  */
-
 trait Behaviors {
+
 	/**
-	 * Store all loaded behaviors
+	 * Store all loaded behaviors.
 	 *
-	 * @see Model::_actsAs
 	 * @var array
 	 */
 	protected $_behaviors = [];
@@ -38,6 +37,7 @@ trait Behaviors {
 	 */
 	protected static function _initialize($class) {
 		$self = parent::_initialize($class);
+
 		if (!$self->_inited) {
 			$self->_inited = true;
 			$self->_init();
@@ -55,6 +55,7 @@ trait Behaviors {
 	 */
 	protected function _init() {
 		$self = static::_object();
+
 		if (!isset($self->_actsAs)) {
 			$self->_actsAs = [];
 		}
@@ -76,10 +77,10 @@ trait Behaviors {
 	 */
 	public static function __callStatic($method, $params) {
 		$self = static::_object();
+
 		foreach ($self->_behaviors as $class => $behavior) {
-			if(method_exists($class, $method)) {
-				$model = get_called_class();
-				array_unshift($params, $model);
+			if (method_exists($class, $method)) {
+				array_unshift($params, get_called_class());
 				return call_user_func_array([$class, $method], $params);
 			}
 		}
