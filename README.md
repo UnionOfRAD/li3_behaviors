@@ -1,90 +1,93 @@
-# Model behaviors base classes
+## About
 
-## Requirement
+This library provides base classes for implementing model behaviors.
+Model behaviors provide a simple way to extend models. This pattern allow 
+common logic to be encapsulated inside behaviors for keeping models light
+and composed only by its own business logic.
 
-PHP 5.4
+The goal of this project is to work out and finalize a model behavior
+implementation that in the future can be integrated into Lithium. We
+are depending on PHP >= 5.4 here as is assumed that this effort will
+at least take a bit longer. So that in the meantime Lithium will already 
+depend on 5.4.
 
-## Installation
+## Requirements
 
-Checkout the code to either of your library directories:
+Lithium and PHP 5.4.
 
-```
-cd libraries
-git clone git@github.com:jails/li3_behaviors.git
-```
+## Usage
 
-Include the library in your `/app/config/bootstrap/libraries.php`
+### Managing and Loading Behaviors
 
-```
-Libraries::add('li3_behaviors');
-```
-
-## Presentation
-
-Model behaviors providing a simple way to extend models. This pattern allow common logic to be encapsulated inside behaviors for keeping models lite and composed only by its own business logic.
-
-## API
-
-Simple model creation attached to a behavior:
+First to add the ability of using behaviors in a model, use
+the behaviors trait in your model. After that define all behaviors you
+plan to use in the `$_actsAs` property of the model class.
 
 ```php
-<?php
-//app/models/Posts.php
-namespace app\models;
-use li3_behaviors\data\model\Behaviors;
-
+// ...
 class Posts extends \lithium\data\Model {
-    use Behaviors;
 
-    protected $_actsAs = ['Slug' => [
-        'fields' => ['title' => 'title', 'name' => 'slug']
-    ]];
-}
-?>
+   use li3_behaviors\data\model\Behaviors;
+
+   protected $_actsAs = [
+       'Slug' => ['fields' => ['title']]
+   ];
+// ...
 ```
+
+The behaviors trait also makes some static methods available in the model,
+which allows to manage behaviors as follows.
+
+```php
+// Bind the slug behavior with configuration.
+Posts::bindBehavior('Sluggable', ['field' => 'slug', 'label' => 'title']]);
+
+// Accessing configuration.
+Posts::behavior('Sluggable')->config();
+Posts::behavior('Sluggable')->config('fields');
+
+// Unbinding it again.
+Posts::unbindBehavior('Sluggable');
+```
+
+### Creating a Behavior
+
+Now that we are able to load and manage behaviors we can create our own
+behavior which must extend the `Behavior` class. In the following example
+we create a `Sluggable` behavior in `extensions/data/behavior/Sluggable.php`.
 
 ```php
 <?php
-//app/extensions/data/behavior/Slug.php
+
 namespace app\extensions\data\behavior;
 
 use lithium\util\Inflector;
 
-class Slug extends \li3_behaviors\data\model\Behavior {
+class Sluggable extends \li3_behaviors\data\model\Behavior {
 
-	/**
-	 * Default field names to slug
-	 *
-	 * @var array
-	 */
 	protected $_defaults = array(
-		'fields' => ['label' => 'slug']
+		'field' => 'slug',
+		'label' => 'title'
 	);
 
-	protected function _init() {
-		parent::_init();
-		if ($model = $this->_model) {
-			$behavior = $this;
-			$model::applyFilter('save', function($self, $params, $chain) use ($behavior) {
-				$params = $behavior->invokeMethod('_slug', array($params));
-				return $chain->next($self, $params, $chain);
-			});
-		}
+	protected function _filters($model, $behavior) {
+		$config = $this->_config;
+		$model::applyFilter('save', function($self, $params, $chain) use ($behavior, $config) {
+			$params['data'][$config['field'] = $behavior::generateSlug(
+				$params['data'][$config['label']]
+			);
+			return $chain->next($self, $params, $chain);
+		});
 	}
 
-	protected function _slug() {
-		extract($this->_config);
-		foreach ($fields as $from => $to) {
-			if (isset($params['data'][$from])) {
-				$params['data'][$to] = Inflector::slug($params['data'][$from]);
-			}
-		}
+	public static function generateSlug($value) {
+		return strtolower(Inflector::slug($value));
 	}
 }
 ?>
 ```
 
-## Dynamically Adding Methods
+### Dynamically Adding Methods
 
 Sometimes you need to dynamically add methods to a model instance. I.e. when a field 
 name of a behavior is user configurable and needs to be added as a method on the entity.
@@ -93,7 +96,6 @@ This can be achived by leveraging existing model functionality. Following an exa
 that adds a method using a configured name.
 
 ```php
-
 // $model  = '\app\models\Posts'
 // $config = ['field' => 'tags']
 
@@ -105,12 +107,9 @@ $model::instanceMethods([
 
 $post = Posts::create(['taxonomy' => 'foo,bar,baz']);
 $post->tags();
-
 ```
 
-## Greetings
+## Credits for previous Implementations
 
-The li3 team, Nateabele's filters system and all others which make that possible (including my parents which I love).
-
-## Build status
-[![Build Status](https://secure.travis-ci.org/jails/li3_behaviors.png?branch=master)](http://travis-ci.org/jails/li3_behaviors)
+* Nate Abele, https://github.com/nateabele/li3_behaviors
+* Simon Jaillet, https://github.com/jails/li3_behaviors
