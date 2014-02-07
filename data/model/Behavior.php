@@ -23,7 +23,11 @@ namespace li3_behaviors\data\model;
  *  2. Static calls to the model are transferred to the behavior first
  *     and get the model class name as its first parameter.
  *
- *  3. Instance class to the model are transferred to behavior first
+ *  3. Instance class to the model are transferred to behavior first.
+ *
+ *  4. Each behavior can be instantiated multiple times for each
+ *     model once. There is no need to key configurations by
+ *     model for example.
  *
  * {{{
  * // ...
