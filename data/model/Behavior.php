@@ -8,6 +8,32 @@
 
 namespace li3_behaviors\data\model;
 
+/**
+ * Base class that all behaviors must extend. Behaviors can be applied
+ * to a model via its `actsAs` property. Behaviors have some special
+ * characteristics that should help building them. A behaviors must
+ * be created as `extensions/data/behavior/<name>.php` from where
+ * it can be loaded automatically.
+ *
+ *  1. Default configuration in `$_defaults` will automatically be
+ *     merged with configuration specified in the `actsAs` poperty
+ *     of the model and be made available in its entirety in the
+ *     behaviors `$_config` property.
+ *
+ *  2. Static calls to the model are transferred to the behavior first
+ *     and get the model class name as its first parameter.
+ *
+ *  3. Instance class to the model are transferred to behavior first
+ *
+ * {{{
+ * // ...
+ * class Slug extends \li3_behaviors\data\model\Behavior {
+ *
+ * // ...
+ * }}}
+ *
+ * @see li3_behaviors\data\model\Behaviors
+ */
 class Behavior extends \lithium\core\Object {
 
 	/**
