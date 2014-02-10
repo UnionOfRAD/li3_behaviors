@@ -7,9 +7,10 @@ and composed only by its own business logic.
 
 The goal of this project is to work out and finalize a model behavior
 implementation that in the future can be integrated into Lithium. We
-are depending on PHP >= 5.4 here as is assumed that this effort will
-at least take a bit longer. So that in the meantime Lithium will already 
-depend on 5.4.
+are depending on PHP >= 5.4 here as we want to use new features like
+traits and short array syntax. It's assumed that the effort 
+of finalizing an implementation will take as long as it takes Lithium
+to move further to a future version that will then also depend on 5.4.
 
 _Please note that this project is still in its alpha phase and implementation
 details may change without any deprecation notices._
