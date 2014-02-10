@@ -87,7 +87,11 @@ class Behavior extends \lithium\core\Object {
 
 		static::_config($model, $behavior, $this->_config, $this->_defaults);
 		static::_filters($model, $behavior);
-		$model::instanceMethods(static::_methods($model, $behavior));
+
+
+		if ($methods = static::_methods($model, $behavior)) {
+			$model::instanceMethods($methods);
+		}
 	}
 
 	/**
