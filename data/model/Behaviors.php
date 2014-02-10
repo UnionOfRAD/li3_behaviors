@@ -47,7 +47,7 @@ use RuntimeException;
  * Behaviors themselves must extend the Behavior class. See the class'
  * docblock for more information on how to implement behaviors.
  *
- * @see li3_behaviors\data\model\Behaviors::actsAs()
+ * @see li3_behaviors\data\model\Behaviors::bindBehavior()
  * @see li3_behaviors\data\model\Behavior
  */
 trait Behaviors {
