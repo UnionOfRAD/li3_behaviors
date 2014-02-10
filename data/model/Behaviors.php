@@ -124,8 +124,8 @@ trait Behaviors {
 
 	/**
 	 * Transfer call from the entity class to the behaviors. Concrete
-	 * behavior methods will receive the following parameters: `$entity`
-	 * and `$behavior`.
+	 * behavior methods will receive the following parameters: `$model`
+	 * `$behavior` and `$entity`.
 	 *
 	 * @param string $method Method name caught by `__call()`.
 	 * @param array $params Arguments given to the above `$method` call.
@@ -140,6 +140,7 @@ trait Behaviors {
 		foreach (static::$_behaviors[$model] as $class => $behavior) {
 			if ($behavior->respondsTo($method)) {
 				array_unshift($params, $behavior);
+				array_unshift($params, $model);
 
 				return $behavior->invokeMethod($method, $params);
 			}
