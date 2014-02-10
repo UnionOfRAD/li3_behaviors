@@ -189,7 +189,7 @@ class TokenGenerator extends \li3_behaviors\data\model\Behavior {
 
 Analog to exposing static methods, instance methods can also be exposed to the model easily. Any concrete
 method implemented in the behavior will be exposed. Each behavior method will in addition to the `$entity`
-parameter also receive an instance of the behavior as a second parameter i.e. to access configuration.
+parameter also receive the name of the model and an instance of the behavior as a second parameter i.e. to access configuration.
 
 ```php
 // ...
@@ -200,7 +200,7 @@ class Publishable extends \li3_behaviors\data\model\Behavior {
 		'field' => 'is_published'
 	];
 
-	public function publish($entity, $behavior) {
+	public function publish($model, $behavior, $entity) {
 		$field = $behavior->config('field');
 		$entity->{$field} = true;
 	}
