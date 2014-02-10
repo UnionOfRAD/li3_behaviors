@@ -57,7 +57,6 @@ behavior which must extend the `Behavior` base class. In the following example
 we create a `Sluggable` behavior in `extensions/data/behavior/Sluggable.php`.
 
 ```php
-<?php
 
 namespace app\extensions\data\behavior;
 
@@ -83,8 +82,6 @@ class Sluggable extends \li3_behaviors\data\model\Behavior {
 		return strtolower(Inflector::slug($value));
 	}
 }
-
-?>
 ```
 
 ### Behavior Configuration
@@ -137,7 +134,6 @@ class Serializable extends \li3_behaviors\data\model\Behavior {
 	}
 	
 	// ...
-}
 ```
 
 The `_config()` method gets the configuration and the defaults as defined in `$_defaults` as
@@ -175,7 +171,6 @@ class TokenGenerator extends \li3_behaviors\data\model\Behavior {
 	}
 	
 	// ...
-}
 ```
 
 ### Exposing Instance Methods to the Model
@@ -200,7 +195,6 @@ class Publishable extends \li3_behaviors\data\model\Behavior {
 	}
 
 	// ...
-}
 ```
 
 #### Dynamically Adding Model Instance Methods
@@ -212,9 +206,7 @@ This can be achived by overwriting the `_methods()` method and returning an arra
 of methods keyed by their alias on the model instance.
 
 ```php
-<?php
-
-namespace app\extensions\data\behavior;
+// ...
 
 class Taggable extends \li3_behaviors\data\model\Behavior {
     // ...
@@ -226,20 +218,15 @@ class Taggable extends \li3_behaviors\data\model\Behavior {
 	}
 
 	// ...
-}
-
-?>
 ```
 
 The above exemplaric behavior would then enable the following
 methods on each entity returned from the model.
 
 ```php
-
 Posts::bindBehavior('Taggable', ['field' => 'taxonomy']);
 $item = Posts::create();
 $item->taxonomy();
-
 ```
 
 ### Attaching Filters to the Model
@@ -264,11 +251,7 @@ class Timestamp extends \li3_behaviors\data\model\Behavior {
 	}
 
 	protected static function _timestamp($behavior, $entity, $data) {
-		// ...
-	}
-}
-
-?>
+	// ...
 ```
 
 ## Credits for previous Implementations
