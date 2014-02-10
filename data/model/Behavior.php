@@ -81,8 +81,13 @@ class Behavior extends \lithium\core\Object {
 
 	protected function _init() {
 		parent::_init();
-		$this->_config($this->_config, $defaults);
-		$this->_filters($this->_model, __CLASS__, $this->_config);
+
+		$model = $this->_model;
+		$behavior = $this;
+
+		static::_config($model, $behavior, $this->_config, $this->_defaults);
+		static::_filters($model, $behavior);
+		$model::instanceMethods(static::_methods($model, $behavior));
 	}
 
 	/**
@@ -105,8 +110,8 @@ class Behavior extends \lithium\core\Object {
 	 * @param array $config The configuration supplied by the user.
 	 * @param array $defaults The default configuration for this behavior.
 	 */
-	protected function _config($config, $defaults) {
-		$this->_config = $defaults + $config;
+	protected static function _config($model, $behavior, $config, $defaults) {
+		$behavior->config($defaults + $config);
 	}
 
 	/**
@@ -118,10 +123,14 @@ class Behavior extends \lithium\core\Object {
 	 * @param $model Class name of the model.
 	 * @param $model Class name of the behavior.
 	 */
-	protected function _filters($model, $behavior) {}
+	protected static function _filters($model, $behavior) {}
+
+	protected static function _methods($model, $behavior) {
+		return [];
+	}
 
 	/**
-	 * Gets the configuration, allows for introspecting behavior configuration.
+	 * Gets or sets the configuration, allows for introspecting behavior configuration.
 	 *
 	 * @param string $config A configuration key or if `null` (default) returns whole configuration.
 	 * @return array|string Configuration array or configuration option value if $key was string.
@@ -129,6 +138,9 @@ class Behavior extends \lithium\core\Object {
 	public function config($key = null) {
 		if (!$key) {
 			return $this->_config;
+		}
+		if (is_array($key)) {
+			return $this->_config = $key;
 		}
 		return isset($this->_config[$key]) ? $this->_config[$key] : null;
 	}

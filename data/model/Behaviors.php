@@ -98,6 +98,7 @@ trait Behaviors {
 		foreach (static::$_behaviors[$model] as $class => $behavior) {
 			if (method_exists($class, $method)) {
 				array_unshift($params, $model);
+				array_unshift($params, $behavior);
 
 				return call_user_func_array([$class, $method], $params);
 			}
