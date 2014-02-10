@@ -60,6 +60,9 @@ trait Behaviors {
 	 */
 	protected static $_behaviors = [];
 
+
+	protected $_initializedBehaviors = false;
+
 	/**
 	 * Initializes behaviors from the `$_actsAs` property of the model.
 	 *
@@ -73,9 +76,14 @@ trait Behaviors {
 	protected static function _initialize($class) {
 		$self = parent::_initialize($class);
 
-		if (isset(static::$_actsAs)) {
+		if ($self->_initializedBehaviors) {
+			return $self;
+		}
+		$self->_initializedBehaviors = true;
+
+		if (isset($class::$_actsAs)) {
 			foreach (Set::normalize(static::$_actsAs) as $name => $config) {
-				static::bindBehavior($name, $config);
+				static::bindBehavior($name, $config ?: []);
 			}
 		}
 		return $self;
