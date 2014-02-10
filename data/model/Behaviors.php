@@ -60,7 +60,14 @@ trait Behaviors {
 	 */
 	protected static $_behaviors = [];
 
-
+	/**
+	 * Indicates if we already intialized behaviors
+	 * on a model. Prevents recursion as Model's `_initialize()`
+	 * seems tricky to overwrite.
+	 *
+	 * @fixme Refactor this when we have decent tests in place.
+	 * @var boolean
+	 */
 	protected $_initializedBehaviors = false;
 
 	/**
@@ -91,7 +98,8 @@ trait Behaviors {
 
 	/**
 	 * Transfer static call to the behaviors first. Static behavior
-	 * methods will get the name of the model as its first parameter.
+	 * methods will get the name of the model as its first parameter
+	 * and the instance of the behavior as a second paramter.
 	 *
 	 * @param string $method Method name caught by `__callStatic()`.
 	 * @param array $params Arguments given to the above `$method` call.
@@ -115,7 +123,9 @@ trait Behaviors {
 	}
 
 	/**
-	 * Transfer call from the entity class to the behaviors.
+	 * Transfer call from the entity class to the behaviors. Concrete
+	 * behavior methods will receive the following parameters: `$entity`
+	 * and `$behavior`.
 	 *
 	 * @param string $method Method name caught by `__call()`.
 	 * @param array $params Arguments given to the above `$method` call.

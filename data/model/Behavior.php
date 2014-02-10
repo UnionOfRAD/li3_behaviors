@@ -116,7 +116,7 @@ class Behavior extends \lithium\core\Object {
 	 * or even normalized in a custom way.
 	 *
 	 * That's why merging the defaults with the provided configuration can be
-	 * controlled easily by yourself - the implementor. By default we do a simple
+	 * controlled easily by yourself - the implementer. By default we do a simple
 	 * one-dimensional merge adding defaults and configuration to eachother. To
 	 * control configuration merging overwrite this method.
 	 *
