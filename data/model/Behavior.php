@@ -25,11 +25,16 @@ namespace li3_behaviors\data\model;
  *
  *  3. Static calls to the model are transferred to the behavior first
  *     and get the model class name as its first parameter. This allows
- *     you to expose methods as if they were implemented on the model
+ *     you to expose methods as if they were implemented on the model.
+ *     Each static method implemented in the behavior receives
+ *     two parameters by default: The name of the model class,
+ *     an instance of the behavior.
  *
  *  4. Instance class to the model are transferred to behavior first.
  *     This allows you to expose methods as if the were implement on
- *     the model.
+ *     the model. Each concrete public method implemented on the
+ *     behavior receives three parameters by default: The name of the
+ *     model class, an instance of the behavior and the entity.
  *
  *  5. Each behavior can be instantiated multiple times for each
  *     model once. There is no need to key configurations by
@@ -39,6 +44,12 @@ namespace li3_behaviors\data\model;
  *     you to i.e. provide a `tags()` or `taxonomy()` method on
  *     the entity dependent of the configuration provided.
  *
+ *     This can be achieved by implementing the following method
+ *     in the behavior which must return an array of model instance
+ *     methods to be added to the model.
+ *
+ * @see li3_behaviors\data\model\Behavior::_config()
+ * @see li3_behaviors\data\model\Behavior::_methods()
  * @see li3_behaviors\data\model\Behaviors
  */
 class Behavior extends \lithium\core\Object {
@@ -125,10 +136,22 @@ class Behavior extends \lithium\core\Object {
 	 *  - Overwrite to apply your own filters. -
 	 *
 	 * @param $model Class name of the model.
-	 * @param $model Class name of the behavior.
+	 * @param $behavior Instance of the behavior.
 	 */
 	protected static function _filters($model, $behavior) {}
 
+	/**
+	 * Allows for dyamically adding instance methods to the model. The
+	 * methods to be added must be returned as an array, where the key
+	 * is the name of the concrete method on the model and the value
+	 * an anonymous function.
+	 *
+	 *  - Overwrite to add your own methods. -
+	 *
+	 * @param $model Class name of the model.
+	 * @param $behavior Instance of the behavior.
+	 * @return array Methods to be added to the model instance.
+	 */
 	protected static function _methods($model, $behavior) {
 		return [];
 	}
@@ -136,7 +159,9 @@ class Behavior extends \lithium\core\Object {
 	/**
 	 * Gets or sets the configuration, allows for introspecting behavior configuration.
 	 *
-	 * @param string $config A configuration key or if `null` (default) returns whole configuration.
+	 * @param string|array $config A configuration key or if `null` (default) returns whole
+	 *                     configuration. If an array overwrite (sets) the configuration of the
+	 *                     behavior.
 	 * @return array|string Configuration array or configuration option value if $key was string.
 	 */
 	public function config($key = null) {

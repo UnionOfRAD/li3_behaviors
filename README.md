@@ -92,21 +92,29 @@ class Sluggable extends \li3_behaviors\data\model\Behavior {
 Sometimes you need to dynamically add methods to a model instance. I.e. when a field 
 name of a behavior is user configurable and needs to be added as a method on the entity.
 
-This can be achived by leveraging existing model functionality. Following an example
-that adds a method using a configured name.
+This can be achived by overwriting the `_methods()` method and returning an array
+of methods keyed by their alias on the model instance.
 
 ```php
-// $model  = '\app\models\Posts'
-// $config = ['field' => 'tags']
+<?php
 
-$model::instanceMethods([
-	$config['field'] => function($entity) {
-		return $entity->taxonomy;
+namespace app\extensions\data\behavior;
+
+use lithium\util\Inflector;
+
+class Taggable extends \li3_behaviors\data\model\Behavior {
+    // ...
+
+	protected static function _methods($model, $behavior) {
+		return [
+			$behavior->config('field') => function() { /* ... */  }
+		]
 	}
-]);
 
-$post = Posts::create(['taxonomy' => 'foo,bar,baz']);
-$post->tags();
+	// ...
+}
+
+?>
 ```
 
 ## Credits for previous Implementations
