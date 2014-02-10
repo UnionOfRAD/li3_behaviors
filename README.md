@@ -69,7 +69,7 @@ use lithium\util\Inflector;
 
 class Sluggable extends \li3_behaviors\data\model\Behavior {
 
-	protected $_defaults = [
+	protected static $_defaults = [
 		'field' => 'slug',
 		'label' => 'title'
 	];
@@ -121,8 +121,8 @@ while merging with the behavior's defaults.
 
 class Serializable extends \li3_behaviors\data\model\Behavior {
 
-	protected $_defaults = [
-		'fields' => [],
+	protected static $_defaults = [
+		'fields' => []
 	];
 
 	protected static function _config($model, $behavior, $config, $defaults) {
@@ -160,7 +160,7 @@ The example below shows how we expose a token generation method to the model.
 
 class TokenGenerator extends \li3_behaviors\data\model\Behavior {
 
-	protected $_defaults = [
+	protected static $_defaults = [
 		'short' => false
 	];
 
@@ -187,7 +187,7 @@ parameter also receive an instance of the behavior as a second parameter i.e. to
 
 class Publishable extends \li3_behaviors\data\model\Behavior {
 
-	protected $_defaults = [
+	protected static $_defaults = [
 		'field' => 'is_published'
 	];
 

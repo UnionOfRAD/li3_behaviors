@@ -62,43 +62,28 @@ class Behavior extends \lithium\core\Object {
 	 * @see li3_behaviors\data\model\Behavior::_config()
 	 * @var array
 	 */
-	protected $_defaults = [];
+	protected static $_defaults = [];
 
 	/**
 	 * Holding the initialized configuration array of the behavior possibly merged from
 	 * the `$_defaults` property and any configuration via the model's `$_actsAs` property.
+	 *
+	 * Always at least holds the fully namespaced class name of the
+	 * model this behavior is bound to.
 	 *
 	 * @see li3_behaviors\data\model\Behavior::_config()
 	 * @var array
 	 */
 	protected $_config = [];
 
-	/**
-	 * Holds the fully namespaced class name of the model this
-	 * behavior is bound to. Good when you need to call
-	 * static methods on the model.
-	 *
-	 * @var string
-	 */
-	protected $_model = null;
-
-	/**
-	 * Automatically makes model property available from config.
-	 *
-	 * @see lithium\core\Object::_autoConfig
-	 * @var array
-	 */
-	protected $_autoConfig = ['model'];
-
 	protected function _init() {
 		parent::_init();
 
-		$model = $this->_model;
+		$model = $this->_config['model'];
 		$behavior = $this;
 
-		static::_config($model, $behavior, $this->_config, $this->_defaults);
+		static::_config($model, $behavior, $this->_config, static::$_defaults);
 		static::_filters($model, $behavior);
-
 
 		if ($methods = static::_methods($model, $behavior)) {
 			$model::instanceMethods($methods);
