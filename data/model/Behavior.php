@@ -11,7 +11,7 @@ namespace li3_behaviors\data\model;
 /**
  * Base class that all behaviors must extend. Behaviors can be applied
  * to a model via its `actsAs` property. Behaviors have some special
- * characteristics that should help building them. A behaviors must
+ * characteristics that should help building them. A behavior must
  * be created as `extensions/data/behavior/<name>.php` from where
  * it can be loaded automatically.
  *
@@ -91,7 +91,7 @@ class Behavior extends \lithium\core\Object {
 	}
 
 	/**
-	 * Initializes configuration into `$_config`.
+	 * Initializes configuration into `$_config` using `config()`.
 	 *
 	 * - Overwrite to implement your own custom configuration merge strategies. -
 	 *
@@ -107,6 +107,8 @@ class Behavior extends \lithium\core\Object {
 	 *
 	 * @see lithium\util\Set::normalize()
 	 * @see lithium\util\Set::merge()
+	 * @param $model Class name of the model.
+	 * @param $behavior Instance of the behavior.
 	 * @param array $config The configuration supplied by the user.
 	 * @param array $defaults The default configuration for this behavior.
 	 */

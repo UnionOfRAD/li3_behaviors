@@ -23,8 +23,8 @@ use RuntimeException;
  *
  *    use li3_behaviors\data\model\Behaviors;
  *
- *    protected $_actsAs = [
- *        'Slug' => ['fields' => ['title']]
+ *    protected static $_actsAs = [
+ *        'Sluggable' => ['fields' => ['title']]
  *    ];
  * // ...
  * }}}
