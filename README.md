@@ -8,12 +8,20 @@ and composed only by its own business logic.
 The goal of this project is to work out and finalize a model behavior
 implementation that in the future can be integrated into Lithium. We
 are depending on PHP >= 5.4 here as we want to use new features like
-traits and short array syntax. It's assumed that the effort 
-of finalizing an implementation will take as long as it takes Lithium
-to move further to a future version that will then also depend on 5.4.
+traits and short array syntax. 
+
+It's assumed that the effort of finalizing an implementation will take as long 
+as it takes Lithium to move further to a future version that will then also depend 
+on 5.4. Alternatively the `Behaviors` implementation can be folded into the 
+`Model` and long array syntax be used. This would make an earlier merge
+into core possible.
 
 _Please note that this project is still in its alpha phase and implementation
-details may change without any deprecation notices._
+details may change without any deprecation notices._ Still we'll try to keep
+this as stable as possible. 
+
+If you'd like to contribute then adding tests would be very welcome as this
+project lacks decent ones currently.
 
 ## Requirements
 
