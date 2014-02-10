@@ -29,7 +29,7 @@ class Posts extends \lithium\data\Model {
 
    use li3_behaviors\data\model\Behaviors;
 
-   protected $_actsAs = [
+   protected static $_actsAs = [
        'Sluggable' => ['field' => 'slug', 'label' => 'title']
    ];
 // ...
@@ -70,16 +70,16 @@ class Sluggable extends \li3_behaviors\data\model\Behavior {
 		'label' => 'title'
 	);
 
-	protected function _filters($model, $behavior, $config) {
-		$model::applyFilter('save', function($self, $params, $chain) use ($behavior, $config) {
-			$params['data'][$config['field'] = $behavior::generateSlug(
-				$params['data'][$config['label']]
+	protected function _filters($model, $behavior) {
+		$model::applyFilter('save', function($self, $params, $chain) use ($behavior) {
+			$params['data'][$behavior->config('field')] = static::_generateSlug(
+				$params['data'][$behavior->config('label')]
 			);
 			return $chain->next($self, $params, $chain);
 		});
 	}
 
-	public static function generateSlug($value) {
+	protected static function _generateSlug($value) {
 		return strtolower(Inflector::slug($value));
 	}
 }
