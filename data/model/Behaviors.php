@@ -129,6 +129,8 @@ trait Behaviors {
 		}
 		foreach (static::$_behaviors[$model] as $class => $behavior) {
 			if ($behavior->respondsTo($method)) {
+				array_unshift($params, $behavior);
+
 				return $behavior->invokeMethod($method, $params);
 			}
 		}
