@@ -121,8 +121,8 @@ class Behavior extends \lithium\core\Object {
 	 *
 	 *  - Overwrite to apply your own filters. -
 	 *
-	 * @param $model Class name of the model.
-	 * @param $behavior Instance of the behavior.
+	 * @param string $model Class name of the model.
+	 * @param object $behavior Instance of the behavior.
 	 */
 	protected static function _filters($model, $behavior) {}
 
@@ -134,8 +134,8 @@ class Behavior extends \lithium\core\Object {
 	 *
 	 *  - Overwrite to add your own methods. -
 	 *
-	 * @param $model Class name of the model.
-	 * @param $behavior Instance of the behavior.
+	 * @param string $model Class name of the model.
+	 * @param object $behavior Instance of the behavior.
 	 * @return array Methods to be added to the model instance.
 	 */
 	protected static function _methods($model, $behavior) {
