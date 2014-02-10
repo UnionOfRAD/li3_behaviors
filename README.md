@@ -32,7 +32,8 @@ class Posts extends \lithium\data\Model {
    protected static $_actsAs = [
        'Sluggable' => ['field' => 'slug', 'label' => 'title']
    ];
-// ...
+	
+   // ...
 ```
 
 The behaviors trait also makes some static methods available in the model,
@@ -115,7 +116,6 @@ while merging with the behavior's defaults.
 // ...
 
 class Serializable extends \li3_behaviors\data\model\Behavior {
-    // ...
 
 	protected $_defaults = [
 		'fields' => [],
@@ -155,7 +155,6 @@ The example below shows how we expose a token generation method to the model.
 // ...
 
 class TokenGenerator extends \li3_behaviors\data\model\Behavior {
-    // ...
 
 	protected $_defaults = [
 		'short' => false
@@ -183,7 +182,6 @@ parameter also receive an instance of the behavior as a second parameter i.e. to
 // ...
 
 class Publishable extends \li3_behaviors\data\model\Behavior {
-    // ...
 
 	protected $_defaults = [
 		'field' => 'is_published'
@@ -239,7 +237,6 @@ method. Overwrite it to attach filters to the model during initialization phase.
 // ...
 
 class Timestamp extends \li3_behaviors\data\model\Behavior {
-	
 	// ...
 
 	protected static function _filters($model, $behavior) {
@@ -251,6 +248,9 @@ class Timestamp extends \li3_behaviors\data\model\Behavior {
 	}
 
 	protected static function _timestamp($behavior, $entity, $data) {
+		// ...
+	}
+
 	// ...
 ```
 
