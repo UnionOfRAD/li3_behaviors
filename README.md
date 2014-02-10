@@ -108,7 +108,7 @@ The defaults are merged with the provided configuration using simple array
 addition (`$config += $defaults`). If you want to change the way configuration
 is merged read further.
 
-### Providing Custom Configuration Logic
+#### Providing Custom Configuration Logic
 
 Behaviors often come with different requirements towards configuration.
 In some cases just a 1-dimensional array needs to be merged in other cases 
