@@ -133,7 +133,7 @@ class Serializable extends \li3_behaviors\data\model\Behavior {
 		'fields' => []
 	];
 
-	protected static function _config($model, $behavior, $config, $defaults) {
+	protected static function _config($config, $defaults) {
 		$config += $defaults;
 		$config['fields'] = Set::normalize($config['fields']);
 
@@ -142,14 +142,15 @@ class Serializable extends \li3_behaviors\data\model\Behavior {
 				$pass = 'json';
 			}
 		}
-		$behavior->config($config);
+		return $config;
 	}
 	
 	// ...
 ```
 
 The `_config()` method gets the configuration and the defaults as defined in `$_defaults` as
-the 3rd and 4th parameters. The method must finally set the configuration using the `$behavior->config()`.
+the 1st and 2nd parameters. The method must finally return the configuration that should 
+be used for the behavior instance.
 
 ### Exposing Static Methods to the Model
 

@@ -82,7 +82,7 @@ class Behavior extends \lithium\core\Object {
 		$model = $this->_config['model'];
 		$behavior = $this;
 
-		static::_config($model, $behavior, $this->_config, static::$_defaults);
+		$this->_config = static::_config($this->_config, static::$_defaults);
 		static::_filters($model, $behavior);
 
 		if ($methods = static::_methods($model, $behavior)) {
@@ -107,13 +107,12 @@ class Behavior extends \lithium\core\Object {
 	 *
 	 * @see lithium\util\Set::normalize()
 	 * @see lithium\util\Set::merge()
-	 * @param $model Class name of the model.
-	 * @param $behavior Instance of the behavior.
 	 * @param array $config The configuration supplied by the user.
 	 * @param array $defaults The default configuration for this behavior.
+	 * @param array The final configuration which should be set for this behavior.
 	 */
-	protected static function _config($model, $behavior, $config, $defaults) {
-		$behavior->config($defaults + $config);
+	protected static function _config($config, $defaults) {
+		return $defaults + $config;
 	}
 
 	/**
@@ -144,19 +143,14 @@ class Behavior extends \lithium\core\Object {
 	}
 
 	/**
-	 * Gets or sets the configuration, allows for introspecting behavior configuration.
+	 * Gets the configuration, allows for introspecting behavior configuration.
 	 *
-	 * @param string|array $config A configuration key or if `null` (default) returns whole
-	 *                     configuration. If an array overwrite (sets) the configuration of the
-	 *                     behavior.
+	 * @param string $config A configuration key or if `null` (default) returns whole configuration.
 	 * @return array|string Configuration array or configuration option value if $key was string.
 	 */
 	public function config($key = null) {
 		if (!$key) {
 			return $this->_config;
-		}
-		if (is_array($key)) {
-			return $this->_config = $key;
 		}
 		return isset($this->_config[$key]) ? $this->_config[$key] : null;
 	}
