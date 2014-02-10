@@ -82,7 +82,7 @@ class Sluggable extends \li3_behaviors\data\model\Behavior {
 		'label' => 'title'
 	];
 
-	protected function _filters($model, $behavior) {
+	protected static function _filters($model, $behavior) {
 		$model::applyFilter('save', function($self, $params, $chain) use ($behavior) {
 			$params['data'][$behavior->config('field')] = static::_generate(
 				$params['data'][$behavior->config('label')]
