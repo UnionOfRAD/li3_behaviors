@@ -112,7 +112,7 @@ class Behavior extends \lithium\core\Object {
 	 * @param array The final configuration which should be set for this behavior.
 	 */
 	protected static function _config($config, $defaults) {
-		return $defaults + $config;
+		return $config + $defaults;
 	}
 
 	/**
