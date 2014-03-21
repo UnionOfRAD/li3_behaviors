@@ -145,14 +145,18 @@ class Behavior extends \lithium\core\Object {
 	}
 
 	/**
-	 * Gets the configuration, allows for introspecting behavior configuration.
+	 * Gets/sets the configuration, allows for introspecting and changing behavior configuration.
 	 *
-	 * @param string $config A configuration key or if `null` (default) returns whole configuration.
+	 * @param string $key A configuration key or if `null` (default) returns whole configuration.
+	 * @param mixed $value Configuration value if `null` (default) will return $key.
 	 * @return array|string Configuration array or configuration option value if $key was string.
 	 */
-	public function config($key = null) {
-		if (!$key) {
+	public function config($key = null, $value = null) {
+		if ($key === null) {
 			return $this->_config;
+		}
+		if ($value !== null) {
+			return $this->_config[$key] = $value;
 		}
 		return isset($this->_config[$key]) ? $this->_config[$key] : null;
 	}

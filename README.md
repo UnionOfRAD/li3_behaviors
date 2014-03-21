@@ -59,6 +59,9 @@ Posts::bindBehavior('Sluggable', ['field' => 'slug', 'label' => 'title']);
 Posts::behavior('Sluggable')->config();
 Posts::behavior('Sluggable')->config('field');
 
+// Updating configuration.
+Posts::behavior('Sluggable')->config('field', 'alt');
+
 // Unbinding it again.
 Posts::unbindBehavior('Sluggable');
 ```
