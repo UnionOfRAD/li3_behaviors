@@ -82,7 +82,7 @@ class Behavior extends \lithium\core\Object {
 		$model = $this->_config['model'];
 		$behavior = $this;
 
-		$this->_config = static::_config($this->_config, static::$_defaults);
+		$this->_config = static::_config($model, $behavior, $this->_config, static::$_defaults);
 		static::_filters($model, $behavior);
 
 		if ($methods = static::_methods($model, $behavior)) {
@@ -107,11 +107,13 @@ class Behavior extends \lithium\core\Object {
 	 *
 	 * @see lithium\util\Set::normalize()
 	 * @see lithium\util\Set::merge()
+	 * @param string $model Class name of the model.
+	 * @param object $behavior Instance of the behavior.
 	 * @param array $config The configuration supplied by the user.
 	 * @param array $defaults The default configuration for this behavior.
 	 * @param array The final configuration which should be set for this behavior.
 	 */
-	protected static function _config($config, $defaults) {
+	protected static function _config($model, $behavior, $config, $defaults) {
 		return $config + $defaults;
 	}
 
