@@ -270,6 +270,28 @@ class Timestamp extends \li3_behaviors\data\model\Behavior {
 	// ...
 ```
 
+### Attaching Finders to the Model
+
+To add finders to the model's find method, finders should be used. If your behavior 
+needs to use finders a good place to attach them is the behavior's `_finders()`
+method. Overwrite it to add finders to the model during initialization phase.
+
+```php
+// ...
+
+class Taggable extends \li3_behaviors\data\model\Behavior {
+	// ...
+
+	protected static function _finders($model, $behavior) {
+		$model::finder('tag', function($self, $params, $chain) use ($behavior) {
+			// ...
+			return $chain->next($self, $params, $chain);
+		});
+	}
+
+	// ...
+```
+
 ## Credits for previous Implementations
 
 * Nate Abele, https://github.com/nateabele/li3_behaviors

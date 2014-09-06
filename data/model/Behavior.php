@@ -84,6 +84,7 @@ class Behavior extends \lithium\core\Object {
 
 		$this->_config = static::_config($model, $behavior, $this->_config, static::$_defaults);
 		static::_filters($model, $behavior);
+		static::_finders($model, $behavior);
 
 		if ($methods = static::_methods($model, $behavior)) {
 			$model::instanceMethods($methods);
@@ -128,6 +129,18 @@ class Behavior extends \lithium\core\Object {
 	 * @param object $behavior Instance of the behavior.
 	 */
 	protected static function _filters($model, $behavior) {}
+
+	/**
+	 * Add finders to $model. Automatically called during initialization
+	 * of behavior and model.
+	 *
+	 *  - Overwrite to add your own finders. -
+	 *
+	 * @see lithium\data\Model::finder()
+	 * @param string $model Class name of the model.
+	 * @param object $behavior Instance of the behavior.
+	 */
+	protected static function _finders($model, $behavior) {}
 
 	/**
 	 * Allows for dyamically adding instance methods to the model. The
