@@ -161,9 +161,11 @@ trait Behaviors {
 	 * @return \li3_behaviors\data\model\Behavior Intance of the behavior.
 	 */
 	public static function behavior($name) {
-		$class = Libraries::locate('behavior', $name);
 		$model = get_called_class();
 
+		if (!$class = Libraries::locate('behavior', $name)) {
+			throw new RuntimeException("No behavior named `{$named}` found.");
+		}
 		if (!isset(static::$_behaviors[$model][$class])) {
 			throw new RuntimeException("Behavior `{$class}` not bound to model `{$model}`.");
 		}
@@ -178,9 +180,11 @@ trait Behaviors {
 	 * @param array $config Configuration for the behavior instance.
 	 */
 	public static function bindBehavior($name, array $config = []) {
-		$class = Libraries::locate('behavior', $name);
 		$model = get_called_class();
 
+		if (!$class = Libraries::locate('behavior', $name)) {
+			throw new RuntimeException("No behavior named `{$named}` found.");
+		}
 		static::$_behaviors[$model][$class] = new $class($config + compact('model'));
 	}
 
@@ -191,9 +195,11 @@ trait Behaviors {
 	 * @param string $name The name of the behavior.
 	 */
 	public static function unbindBehavior($name) {
-		$class = Libraries::locate('behavior', $name);
 		$model = get_called_class();
 
+		if (!$class = Libraries::locate('behavior', $name)) {
+			throw new RuntimeException("No behavior named `{$named}` found.");
+		}
 		if (!isset(static::$_behaviors[$model][$class])) {
 			throw new RuntimeException("Behavior `{$class}` not bound to model `{$model}`.");
 		}
