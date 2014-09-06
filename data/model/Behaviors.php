@@ -205,6 +205,21 @@ trait Behaviors {
 		}
 		unset(static::$_behaviors[$model][$class]);
 	}
+
+	/**
+	 * Allows to check if a certain behavior is bound to the model.
+	 *
+	 * @param string $name The name of the behavior.
+	 * @return boolean
+	 */
+	public static function hasBehavior($name) {
+		$model = get_called_class();
+
+		if (!$class = Libraries::locate('behavior', $name)) {
+			throw new RuntimeException("No behavior named `{$named}` found.");
+		}
+		return isset(static::$_behaviors[$model][$class]);
+	}
 }
 
 ?>
