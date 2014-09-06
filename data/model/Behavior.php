@@ -123,6 +123,7 @@ class Behavior extends \lithium\core\Object {
 	 *
 	 *  - Overwrite to apply your own filters. -
 	 *
+	 * @see lithium\core\StaticObject::applyFilter()
 	 * @param string $model Class name of the model.
 	 * @param object $behavior Instance of the behavior.
 	 */
