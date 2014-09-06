@@ -161,11 +161,8 @@ trait Behaviors {
 	 * @return \li3_behaviors\data\model\Behavior Intance of the behavior.
 	 */
 	public static function behavior($name) {
-		$model = get_called_class();
+		list($model, $class) = static::_classesForBehavior($name);
 
-		if (!$class = Libraries::locate('behavior', $name)) {
-			throw new RuntimeException("No behavior named `{$named}` found.");
-		}
 		if (!isset(static::$_behaviors[$model][$class])) {
 			throw new RuntimeException("Behavior `{$class}` not bound to model `{$model}`.");
 		}
@@ -180,11 +177,8 @@ trait Behaviors {
 	 * @param array $config Configuration for the behavior instance.
 	 */
 	public static function bindBehavior($name, array $config = []) {
-		$model = get_called_class();
+		list($model, $class) = static::_classesForBehavior($name);
 
-		if (!$class = Libraries::locate('behavior', $name)) {
-			throw new RuntimeException("No behavior named `{$named}` found.");
-		}
 		static::$_behaviors[$model][$class] = new $class($config + compact('model'));
 	}
 
@@ -195,11 +189,8 @@ trait Behaviors {
 	 * @param string $name The name of the behavior.
 	 */
 	public static function unbindBehavior($name) {
-		$model = get_called_class();
+		list($model, $class) = static::_classesForBehavior($name);
 
-		if (!$class = Libraries::locate('behavior', $name)) {
-			throw new RuntimeException("No behavior named `{$named}` found.");
-		}
 		if (!isset(static::$_behaviors[$model][$class])) {
 			throw new RuntimeException("Behavior `{$class}` not bound to model `{$model}`.");
 		}
@@ -207,18 +198,30 @@ trait Behaviors {
 	}
 
 	/**
-	 * Allows to check if a certain behavior is bound to the model.
+	 * Allows to check if a certain behavior is bound to the model
 	 *
 	 * @param string $name The name of the behavior.
 	 * @return boolean
 	 */
 	public static function hasBehavior($name) {
+		list($model, $class) = static::_classesForBehavior($name);
+
+		return isset(static::$_behaviors[$model][$class]);
+	}
+
+	/**
+	 * Helper method to retrieve current model class and behavior class for name.
+	 *
+	 * @param string $name The name of the behavior.
+	 * @return array An array usable with `list()` with the model and behavior classes.
+	 */
+	protected static function _classesForBehavior($name) {
 		$model = get_called_class();
 
 		if (!$class = Libraries::locate('behavior', $name)) {
 			throw new RuntimeException("No behavior named `{$named}` found.");
 		}
-		return isset(static::$_behaviors[$model][$class]);
+		return [$model, $class];
 	}
 }
 
