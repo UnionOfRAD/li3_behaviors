@@ -1,4 +1,4 @@
-## About
+# Model Behaviors for the Lithium PHP Framework
 
 This library provides base classes for implementing model behaviors.
 Model behaviors provide a simple way to extend models. This pattern allow 
