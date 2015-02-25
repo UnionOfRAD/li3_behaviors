@@ -105,7 +105,7 @@ trait Behaviors {
 	 * @param array $params Arguments given to the above `$method` call.
 	 * @return mixed
 	 */
-	public static function __callStatic($method, $params) {
+	public static function __callStatic($method, array $params) {
 		$model = get_called_class();
 
 		if (!isset(static::$_behaviors[$model])) {
@@ -131,7 +131,7 @@ trait Behaviors {
 	 * @param array $params Arguments given to the above `$method` call.
 	 * @return mixed
 	 */
-	public function __call($method, $params) {
+	public function __call($method, array $params) {
 		$model = get_called_class();
 
 		if (!isset(static::$_behaviors[$model])) {

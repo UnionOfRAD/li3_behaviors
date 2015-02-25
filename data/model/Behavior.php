@@ -114,7 +114,7 @@ class Behavior extends \lithium\core\Object {
 	 * @param array $defaults The default configuration for this behavior.
 	 * @param array The final configuration which should be set for this behavior.
 	 */
-	protected static function _config($model, $behavior, $config, $defaults) {
+	protected static function _config($model, Behavior $behavior, array $config, array $defaults) {
 		return $config + $defaults;
 	}
 
@@ -128,7 +128,7 @@ class Behavior extends \lithium\core\Object {
 	 * @param string $model Class name of the model.
 	 * @param object $behavior Instance of the behavior.
 	 */
-	protected static function _filters($model, $behavior) {}
+	protected static function _filters($model, Behavior $behavior) {}
 
 	/**
 	 * Add finders to $model. Automatically called during initialization
@@ -140,7 +140,7 @@ class Behavior extends \lithium\core\Object {
 	 * @param string $model Class name of the model.
 	 * @param object $behavior Instance of the behavior.
 	 */
-	protected static function _finders($model, $behavior) {}
+	protected static function _finders($model, Behavior $behavior) {}
 
 	/**
 	 * Allows for dyamically adding instance methods to the model. The
@@ -154,7 +154,7 @@ class Behavior extends \lithium\core\Object {
 	 * @param object $behavior Instance of the behavior.
 	 * @return array Methods to be added to the model instance.
 	 */
-	protected static function _methods($model, $behavior) {
+	protected static function _methods($model, Behavior $behavior) {
 		return [];
 	}
 
