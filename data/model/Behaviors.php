@@ -101,11 +101,12 @@ trait Behaviors {
 	 * methods will get the name of the model as its first parameter
 	 * and the instance of the behavior as a second paramter.
 	 *
+	 * @fixme Type hint $params, once parent allows.
 	 * @param string $method Method name caught by `__callStatic()`.
 	 * @param array $params Arguments given to the above `$method` call.
 	 * @return mixed
 	 */
-	public static function __callStatic($method, array $params) {
+	public static function __callStatic($method, $params) {
 		$model = get_called_class();
 
 		if (!isset(static::$_behaviors[$model])) {
@@ -127,11 +128,12 @@ trait Behaviors {
 	 * behavior methods will receive the following parameters: `$model`
 	 * `$behavior` and `$entity`.
 	 *
+	 * @fixme Type hint $params, once parent allows.
 	 * @param string $method Method name caught by `__call()`.
 	 * @param array $params Arguments given to the above `$method` call.
 	 * @return mixed
 	 */
-	public function __call($method, array $params) {
+	public function __call($method, $params) {
 		$model = get_called_class();
 
 		if (!isset(static::$_behaviors[$model])) {
