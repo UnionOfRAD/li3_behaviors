@@ -10,6 +10,7 @@ namespace li3_behaviors\data\model;
 
 use lithium\core\Libraries;
 use lithium\util\Set;
+use Exception;
 use RuntimeException;
 
 /**
@@ -206,8 +207,11 @@ trait Behaviors {
 	 * @return boolean
 	 */
 	public static function hasBehavior($name) {
-		list($model, $class) = static::_classesForBehavior($name);
-
+		try {
+			list($model, $class) = static::_classesForBehavior($name);
+		} catch (Exception $e) {
+			return false;
+		}
 		return isset(static::$_behaviors[$model][$class]);
 	}
 
