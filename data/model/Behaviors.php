@@ -221,7 +221,7 @@ trait Behaviors {
 		$model = get_called_class();
 
 		if (!$class = Libraries::locate('behavior', $name)) {
-			throw new RuntimeException("No behavior named `{$named}` found.");
+			throw new RuntimeException("No behavior named `{$name}` found.");
 		}
 		return [$model, $class];
 	}
