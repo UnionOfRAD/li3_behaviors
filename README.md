@@ -5,11 +5,6 @@ Model behaviors provide a simple way to extend models. This pattern allow
 common logic to be encapsulated inside behaviors for keeping models light
 and composed only by its own business logic.
 
-The goal of this project is to work out and finalize a model behavior
-implementation that in the future can be integrated into Lithium. We
-are depending on PHP >= 5.4 here as we want to use new features like
-traits and short array syntax. 
-
 ## Usage
 
 ### Managing and Loading Behaviors
