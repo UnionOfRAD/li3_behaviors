@@ -174,14 +174,19 @@ trait Behaviors {
 	 * Binds a new instance of a behavior to the model using given config or
 	 * entirely replacing an existing behavior instance with new config.
 	 *
-	 * @param string $name The name of the behavior.
+	 * @param string|object $name The name of the behavior or an instance of it.
 	 * @param array $config Configuration for the behavior instance.
 	 */
 	public static function bindBehavior($name, array $config = []) {
 		list($model, $class) = static::_classesForBehavior($name);
 		static::_initializeBehaviors();
 
-		static::$_behaviors[$model][$class] = new $class($config + compact('model'));
+		if (is_object($name)) {
+			$name->config($config);
+		} else {
+			$name = new $class($config + compact('model'));
+		}
+		static::$_behaviors[$model][$class] = $name;
 	}
 
 	/**
@@ -220,13 +225,15 @@ trait Behaviors {
 	/**
 	 * Helper method to retrieve current model class and behavior class for name.
 	 *
-	 * @param string $name The name of the behavior.
+	 * @param string|object $name The name of the behavior or an instance of it.
 	 * @return array An array usable with `list()` with the model and behavior classes.
 	 */
 	protected static function _classesForBehavior($name) {
 		$model = get_called_class();
 
-		if (!$class = Libraries::locate('behavior', $name)) {
+		if (is_object($name)) {
+			$class = get_class($name);
+		} elseif (!$class = Libraries::locate('behavior', $name)) {
 			throw new RuntimeException("No behavior named `{$name}` found.");
 		}
 		return [$model, $class];

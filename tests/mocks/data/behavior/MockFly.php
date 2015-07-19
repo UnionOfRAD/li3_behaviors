@@ -8,13 +8,18 @@
 
 namespace li3_behaviors\tests\mocks\data\behavior;
 
-class MockFlyBehavior extends \li3_behaviors\data\model\Behavior {
+class MockFly extends \li3_behaviors\data\model\Behavior {
 
-	public static function modelFly($model, $target) {
+	protected static $_defaults = [
+		'foo' => 'bar',
+		'baz' => ['qux']
+	];
+
+	public static function staticFly($model, $target) {
 		return $target . ' reached in 1h54.';
 	}
 
-	public function entityFly($entity, $target) {
+	public function instanceFly($entity, $target) {
 		return $target . ' reached in 1h24.';
 	}
 }
