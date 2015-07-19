@@ -33,7 +33,7 @@ Lithium and PHP 5.4.
 
 First to add the ability of using behaviors in a model, use
 the behaviors trait in your model. After that define all behaviors you
-plan to use in the `$_actsAs` property of the model class.
+plan to use in the `$actsAs` property of the model class.
 
 ```php
 // ...
@@ -41,7 +41,7 @@ class Posts extends \lithium\data\Model {
 
    use li3_behaviors\data\model\Behaviors;
 
-   protected static $_actsAs = [
+   public $actsAs = [
        'Sluggable' => ['field' => 'slug', 'label' => 'title']
    ];
 	
@@ -104,7 +104,7 @@ class Sluggable extends \li3_behaviors\data\model\Behavior {
 
 The configuration of each behavior can be accessed from within the 
 behavior via `config()`. By default configuration for the behavior will
-be set automatically using the user provided configuration from the `$_actsAs`
+be set automatically using the user provided configuration from the `$actsAs`
 property of the model and the defaults provided in the behavior as `$_defaults`.
 
 The defaults are merged with the provided configuration using simple array

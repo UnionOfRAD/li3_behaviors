@@ -66,7 +66,7 @@ class Behavior extends \lithium\core\Object {
 
 	/**
 	 * Holding the initialized configuration array of the behavior possibly merged from
-	 * the `$_defaults` property and any configuration via the model's `$_actsAs` property.
+	 * the `$_defaults` property and any configuration via the model's `$actsAs` property.
 	 *
 	 * Always at least holds the fully namespaced class name of the
 	 * model this behavior is bound to.

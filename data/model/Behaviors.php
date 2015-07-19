@@ -63,38 +63,33 @@ trait Behaviors {
 
 	/**
 	 * Indicates if we already intialized behaviors
-	 * on a model. Prevents recursion as Model's `_initialize()`
-	 * seems tricky to overwrite.
+	 * on a model.
 	 *
-	 * @fixme Refactor this when we have decent tests in place.
-	 * @var boolean
+	 * @var array Keyed by model class named mapped to boolean.
 	 */
-	protected $_initializedBehaviors = false;
+	protected static $_initializedBehaviors = [];
 
 	/**
-	 * Initializes behaviors from the `$_actsAs` property of the model.
+	 * Initializes behaviors from the `$actsAs` property of the model.
 	 *
-	 * Overwrites `Model::_initialize()` in order to hook initialization of
-	 * behaviors into model initialization phase. Note that `Model::_initialize()`
-	 * is still called and its result returned unmodified.
-	 *
-	 * @param string $class The fully-namespaced model class name to initialize.
-	 * @return object Returns the initialized model instance.
+	 * @return void
 	 */
-	protected static function _initialize($class) {
-		$self = parent::_initialize($class);
+	protected static function _initializeBehaviors() {
+		$model = get_called_class();
 
-		if ($self->_initializedBehaviors) {
-			return $self;
+		if (!empty(static::$_initializedBehaviors[$model])) {
+			return;
 		}
-		$self->_initializedBehaviors = true;
+		static::$_initializedBehaviors[$model] = true;
 
-		if (isset($class::$_actsAs)) {
-			foreach (Set::normalize(static::$_actsAs) as $name => $config) {
-				static::bindBehavior($name, $config ?: []);
-			}
+		$self = $model::_object();
+
+		if (!property_exists($self, 'actsAs')) {
+			return;
 		}
-		return $self;
+		foreach (Set::normalize($self->actsAs) as $name => $config) {
+			static::bindBehavior($name, $config ?: []);
+		}
 	}
 
 	/**
@@ -109,6 +104,7 @@ trait Behaviors {
 	 */
 	public static function __callStatic($method, $params) {
 		$model = get_called_class();
+		static::_initializeBehaviors();
 
 		if (!isset(static::$_behaviors[$model])) {
 			return parent::__callStatic($method, $params);
@@ -136,6 +132,7 @@ trait Behaviors {
 	 */
 	public function __call($method, $params) {
 		$model = get_called_class();
+		static::_initializeBehaviors();
 
 		if (!isset(static::$_behaviors[$model])) {
 			return parent::__call($method, $params);
@@ -165,6 +162,7 @@ trait Behaviors {
 	 */
 	public static function behavior($name) {
 		list($model, $class) = static::_classesForBehavior($name);
+		static::_initializeBehaviors();
 
 		if (!isset(static::$_behaviors[$model][$class])) {
 			throw new RuntimeException("Behavior `{$class}` not bound to model `{$model}`.");
@@ -181,18 +179,20 @@ trait Behaviors {
 	 */
 	public static function bindBehavior($name, array $config = []) {
 		list($model, $class) = static::_classesForBehavior($name);
+		static::_initializeBehaviors();
 
 		static::$_behaviors[$model][$class] = new $class($config + compact('model'));
 	}
 
 	/**
 	 * Unbinds an instance of a behavior from the model. Will throw
-	 * an exception if behavior is not bind.
+	 * an exception if behavior is not bound.
 	 *
 	 * @param string $name The name of the behavior.
 	 */
 	public static function unbindBehavior($name) {
 		list($model, $class) = static::_classesForBehavior($name);
+		static::_initializeBehaviors();
 
 		if (!isset(static::$_behaviors[$model][$class])) {
 			throw new RuntimeException("Behavior `{$class}` not bound to model `{$model}`.");
@@ -201,12 +201,14 @@ trait Behaviors {
 	}
 
 	/**
-	 * Allows to check if a certain behavior is bound to the model
+	 * Allows to check if a certain behavior is bound to the model.
 	 *
 	 * @param string $name The name of the behavior.
 	 * @return boolean
 	 */
 	public static function hasBehavior($name) {
+		static::_initializeBehaviors();
+
 		try {
 			list($model, $class) = static::_classesForBehavior($name);
 		} catch (Exception $e) {
