@@ -18,22 +18,22 @@ use RuntimeException;
  * to your model that you plan to use behaviors with, then define all behaviors
  * using the `actsAs` property in your model class.
  *
- * {{{
+ * ```
  * // ...
  * class Posts extends \lithium\data\Model {
  *
  *    use li3_behaviors\data\model\Behaviors;
  *
- *    protected static $_actsAs = [
+ *    public $actsAs = [
  *        'Sluggable' => ['fields' => ['title']]
  *    ];
  * // ...
- * }}}
+ * ```
  *
  * This trait also makes some static methods available in the model,
  * which allows to manage behaviors as follows.
  *
- * {{{
+ * ```
  * // Bind the slug behavior with configuration.
  * Posts::bindBehavior('Slug', ['fields' => ['title]]);
  *
@@ -43,7 +43,7 @@ use RuntimeException;
  *
  * // Unbinding it again.
  * Posts::unbindBehavior('Slug');
- * }}}
+ * ```
  *
  * Behaviors themselves must extend the Behavior class. See the class'
  * docblock for more information on how to implement behaviors.
@@ -155,10 +155,10 @@ trait Behaviors {
 	 * Returns a behavior instance. Configuration of
 	 * the instance can be accessed as follows.
 	 *
-	 * {{{
+	 * ```
 	 * Posts::behavior('Slug')->config();
 	 * Posts::behavior('Slug')->config('fields');
-	 * }}}
+	 * ```
 	 *
 	 * @param string $name The name of the behavior.
 	 * @return \li3_behaviors\data\model\Behavior Intance of the behavior.
