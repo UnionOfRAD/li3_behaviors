@@ -14,7 +14,7 @@ use lithium\core\Libraries;
  */
 Libraries::paths([
 	'behavior' => [
-		'{:library}\data\behavior\{:name}',
+		'{:library}\data\model\behavior\{:name}',
 		'{:library}\extensions\data\behavior\{:name}'
 	]
 ]);
