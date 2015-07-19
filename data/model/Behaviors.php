@@ -16,7 +16,7 @@ use RuntimeException;
 /**
  * Trait that adds support for behaviors to the Model class. Add this trait
  * to your model that you plan to use behaviors with, then define all behaviors
- * using the `actsAs` property in your model class.
+ * using the `_actsAs` property in your model class.
  *
  * ```
  * // ...
@@ -24,7 +24,7 @@ use RuntimeException;
  *
  *    use li3_behaviors\data\model\Behaviors;
  *
- *    public $actsAs = [
+ *    protected $_actsAs = [
  *        'Sluggable' => ['fields' => ['title']]
  *    ];
  * // ...
@@ -70,7 +70,7 @@ trait Behaviors {
 	protected static $_initializedBehaviors = [];
 
 	/**
-	 * Initializes behaviors from the `$actsAs` property of the model.
+	 * Initializes behaviors from the `$_actsAs` property of the model.
 	 *
 	 * @return void
 	 */
@@ -84,10 +84,10 @@ trait Behaviors {
 
 		$self = $model::_object();
 
-		if (!property_exists($self, 'actsAs')) {
+		if (!property_exists($self, '_actsAs')) {
 			return;
 		}
-		foreach (Set::normalize($self->actsAs) as $name => $config) {
+		foreach (Set::normalize($self->_actsAs) as $name => $config) {
 			static::bindBehavior($name, $config ?: []);
 		}
 	}
