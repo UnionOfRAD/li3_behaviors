@@ -13,7 +13,10 @@ use lithium\core\Libraries;
  * behaviors available to your application by running `Libraries::locate('behavior')`.
  */
 Libraries::paths([
-	'behavior' => ['{:library}\extensions\data\behavior\{:name}']
+	'behavior' => [
+		'{:library}\data\behavior\{:name}',
+		'{:library}\extensions\data\behavior\{:name}'
+	]
 ]);
 
 ?>
