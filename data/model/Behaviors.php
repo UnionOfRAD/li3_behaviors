@@ -70,6 +70,21 @@ trait Behaviors {
 	protected static $_initializedBehaviors = [];
 
 	/**
+	 * Overwrites `Model::_initialize()` in order to hook initialization of
+	 * behaviors into model initialization phase. Note that `Model::_initialize()`
+	 * is still called and its result returned unmodified.
+	 *
+	 * @param string $class The fully-namespaced model class name to initialize.
+	 * @return object Returns the initialized model instance.
+	 */
+	protected static function _initialize($class) {
+		$self = parent::_initialize($class);
+
+		static::_initializeBehaviors();
+		return $self;
+	}
+
+	/**
 	 * Initializes behaviors from the `$_actsAs` property of the model.
 	 *
 	 * @return void
