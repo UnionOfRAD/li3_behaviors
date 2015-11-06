@@ -199,6 +199,12 @@ trait Behaviors {
 		if (is_object($name)) {
 			$name->config($config);
 		} else {
+			if (!class_exists($class)) {
+				$message  = "Behavior class `{$class}` does not exist. ";
+				$message .= "Its name might be misspelled. Behavior was requested by ";
+				$message .= "model `{$model}`.";
+				throw new Exception($message);
+			}
 			$name = new $class($config + compact('model'));
 		}
 		static::$_behaviors[$model][$class] = $name;
