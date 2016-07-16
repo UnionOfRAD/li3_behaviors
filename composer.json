@@ -1,11 +1,10 @@
 {
-    "name": "davidpersson/li3_behaviors",
+    "name": "unionofrad/li3_behaviors",
     "type": "lithium-library",
-    "description": "Model behaviors for the Lithium PHP framework",
-    "keywords": ["php", "model", "behavior", "lithium", "li3"],
-    "homepage": "https://github.com/davidpersson/li3_behaviors",
+    "description": "Model behaviors for the li₃ PHP framework",
+    "keywords": ["model", "behavior", "lithium", "li3", "plugin"],
+    "homepage": "https://github.com/unionofrad/li3_behaviors",
     "license": "BSD-3-Clause",
-    "minimum-stability": "dev",
     "authors": [
         {
             "name": "David Persson",

@@ -1,9 +1,29 @@
-# Model Behaviors plugin for the li₃ framework.
+# li₃ Behaviors
 
 This library provides base classes for implementing model behaviors.
 Model behaviors provide a simple way to extend models. This pattern allow 
 common logic to be encapsulated inside behaviors for keeping models light
 and composed only by its own business logic.
+
+## Installation
+
+The preferred installation method is via composer. You can add
+the library as a dependency via:
+
+```
+composer require unionofrad/li3_behaviors
+```
+
+li₃ plugins must be registered within your application bootstrap phase 
+as they use a different (faster) autoloader. 
+
+```php
+Libraries::add('li3_behaviors')
+```
+
+The official manual has more information on 
+[how to register the plugin](http://li3.me/docs/book/manual/1.x/installation/plugins) 
+with the app or use alternative installation methods (i.e. via Git).
 
 ## Usage
 
@@ -270,7 +290,14 @@ class Taggable extends \li3_behaviors\data\model\Behavior {
 	// ...
 ```
 
+## Copyright & License
+
+Copyright 2010 Union of RAD. All rights reserved. This library
+is distributed under the terms of the BSD 3-Clause License. The
+full license text can be found in the LICENSE.txt file.
+
 ## Credits for previous Implementations
 
+* David Persson, https://github.com/davidpersson/li3_behaviors
 * Nate Abele, https://github.com/nateabele/li3_behaviors
 * Simon Jaillet, https://github.com/jails/li3_behaviors
