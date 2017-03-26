@@ -177,7 +177,7 @@ class TokenGenerator extends \li3_behaviors\data\model\Behavior {
 	// Generates a random token either short (8 chars) or long (16 chars) and
 	// returns it. Default expiration is one year.
 	public static function token($model, $behavior) {
-		$token = substr(md5(String::random(32)), 0, $behavior->config('short') ? 8 : 16);
+		$token = substr(md5(Random::generate(32)), 0, $behavior->config('short') ? 8 : 16);
 		$expires = date('Y-m-d H:i:s', strtotime('+1 year'));
 
 		return compact('token', 'expires');
@@ -281,9 +281,9 @@ class Taggable extends \li3_behaviors\data\model\Behavior {
 	// ...
 
 	protected static function _finders($model, $behavior) {
-		$model::finder('tag', function($self, $params, $chain) use ($behavior) {
+		$model::finder('tag', function($params, $next) use ($behavior) {
 			// ...
-			return $chain->next($self, $params, $chain);
+			return $next($params);
 		});
 	}
 
