@@ -84,11 +84,11 @@ class Sluggable extends \li3_behaviors\data\model\Behavior {
 	];
 
 	protected static function _filters($model, $behavior) {
-		$model::applyFilter('save', function($self, $params, $chain) use ($behavior) {
+		Filters::apply($model, 'save', function($params, $next) use ($behavior) {
 			$params['data'][$behavior->config('field')] = static::_generate(
 				$params['data'][$behavior->config('label')]
 			);
-			return $chain->next($self, $params, $chain);
+			return $next($params);
 		});
 	}
 
@@ -254,10 +254,10 @@ class Timestamp extends \li3_behaviors\data\model\Behavior {
 	// ...
 
 	protected static function _filters($model, $behavior) {
-		$model::applyFilter('save', function($self, $params, $chain) use ($behavior) {
+		Filters::apply($model, 'save', function($params, $next) use ($behavior) {
 			$params['data'] = static::_timestamp($behavior, $params['entity'], $params['data']);
 
-			return $chain->next($self, $params, $chain);
+			return $next($params);
 		});
 	}
 
