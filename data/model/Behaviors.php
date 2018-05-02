@@ -98,7 +98,7 @@ trait Behaviors {
 		}
 		static::$_initializedBehaviors[$model] = true;
 
-		$self = $model::_object();
+		$self = $model::object();
 
 		if (!property_exists($self, '_actsAs')) {
 			return;
