@@ -154,11 +154,11 @@ trait Behaviors {
 			return parent::__call($method, $params);
 		}
 		foreach (static::$_behaviors[$model] as $class => $behavior) {
-			if ($behavior->respondsTo($method)) {
+			if (method_exists($behavior, $method)) {
 				array_unshift($params, $behavior);
 				array_unshift($params, $model);
 
-				return $behavior->invokeMethod($method, $params);
+				return call_user_func_array([$behavior, $method], $params);
 			}
 		}
 		return parent::__call($method, $params);
