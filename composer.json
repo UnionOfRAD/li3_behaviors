@@ -3,29 +3,10 @@
     "type": "lithium-library",
     "description": "Model behaviors for the li₃ PHP framework",
     "keywords": ["model", "behavior", "lithium", "li3", "plugin"],
-    "homepage": "https://github.com/unionofrad/li3_behaviors",
     "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "David Persson",
-            "homepage": "https://github.com/davidpersson"
-        },
-        {
-            "name": "Simon Jaillet",
-            "homepage": "https://github.com/jails"
-        },
-        {
-            "name": "Nate Abele",
-            "homepage": "https://github.com/nateabele"
-        },
-        {
-            "name": "Community",
-            "homepage": "http://github.com/unionofrad/li3_behaviors/graphs/contributors"
-        }
-    ],
     "require": {
-        "php": ">=5.4",
-        "composer/installers": "1.*",
+        "php": "^5.4",
+        "composer/installers": "^1",
         "unionofrad/lithium": "^1.2"
     }
 }
