@@ -5,7 +5,7 @@
     "keywords": ["model", "behavior", "lithium", "li3", "plugin"],
     "license": "BSD-3-Clause",
     "require": {
-        "php": "^5.4",
+        "php": "^5.4 || ^7",
         "composer/installers": "^1",
         "unionofrad/lithium": "^1.2"
     }
