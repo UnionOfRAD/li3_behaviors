@@ -53,7 +53,7 @@ namespace li3_behaviors\data\model;
  * @see li3_behaviors\data\model\Behavior::_methods()
  * @see li3_behaviors\data\model\Behaviors
  */
-class Behavior extends \lithium\core\Object {
+class Behavior {
 
 	/**
 	 * Allows to specify default configuration for the behavior.
@@ -77,8 +77,8 @@ class Behavior extends \lithium\core\Object {
 	 */
 	protected $_config = [];
 
-	protected function _init() {
-		parent::_init();
+	public function __construct($config = []) {
+		$this->_config = $config;
 
 		$model = $this->_config['model'];
 		$behavior = $this;
@@ -125,7 +125,7 @@ class Behavior extends \lithium\core\Object {
 	 *
 	 *  - Overwrite to apply your own filters. -
 	 *
-	 * @see lithium\core\StaticObject::applyFilter()
+	 * @see lithium\aop\Filters::apply()
 	 * @param string $model Class name of the model.
 	 * @param object $behavior Instance of the behavior.
 	 */
