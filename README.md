@@ -160,7 +160,7 @@ allows for adding methods to the model easily. Each static method that is expose
 the name of the current model class as its first and the instance of the behavior as a second
 parameter.
 
-This is usefull if you i.e. need to query the model for results or when you want to retrieve
+This is useful if you i.e. need to query the model for results or when you want to retrieve
 configuration from the behavior.
 
 The example below shows how we expose a token generation method to the model.
